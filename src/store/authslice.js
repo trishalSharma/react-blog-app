@@ -5,7 +5,7 @@ const initialState = {
     userData: null
 }
 
-const authSLice = createSlice({
+const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers:{
@@ -20,6 +20,6 @@ const authSLice = createSlice({
     }
 })
 
-export const{login, logout} = authSLice.actions;
+export const{login, logout} = authSlice.actions;
 
-export default  authSLice.reducer;
+export default  authSlice.reducer;
