@@ -25,6 +25,8 @@ function App() {
   }, [dispatch]); 
 
   return !loading ? (
+
+    
     <div className=" text-white min-h-screen flex flex-wrap content-between">
       <div className="w-full block">
         <Header />

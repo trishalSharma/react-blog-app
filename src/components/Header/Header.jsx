@@ -1,10 +1,10 @@
-import React from 'react'
-import { Container, Logo, LogoutBtn } from '../index'
-import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import React from 'react';
+import { Container, Logo, LogoutBtn } from '../index';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-function Header() {
+export default function Header() {
     const authStatus = useSelector((state) => state.auth.status)
     const navigate = useNavigate()
 
@@ -37,27 +37,28 @@ function Header() {
     ]
 
     return (
-        <header className='py-3 rounded-3xl shadow bg-slate-800'>
-            <Container>
-                <nav className='flex'>
-                    <div className='mr-4'>
-                        <Link to='/'>
-                            <Logo />
-                        </Link>
-                    </div>
+    <header className='py-3 w-[50vw] mx-auto rounded-3xl shadow bg-slate-800'>
+        <Container>
+            <nav className='flex'>
+                <div className='mr-4'>
+                    <Link to='/'>
+                        <Logo />
+                    </Link>
+                </div>
+
                     <ul className='flex ml-auto'>
-                        {navItems.map((item) => 
+                        {navItems.map((item) =>
                             item.active ? (
                                 <li key={item.name}>
-                                    <button 
-                                        onClick={() => navigate(item.slug)}
-                                        className='inline-block px-6 py-2 duration-200 hover:cursor-pointer hover:bg-slate-300 hover:text-black rounded-full'
-                                    >
-                                        {item.name}
+                                     <button onClick={() => navigate(item.slug)}
+                                      className='inline-block px-6 py-2 duration-200 hover:cursor-pointer active:opacity-50 hover:bg-slate-200 hover:text-black rounded-full'
+                            >
+                                {item.name}
                                     </button>
                                 </li>
                             ) : null
                         )}
+                        
                         {authStatus && (
                             <li>
                                 <LogoutBtn />
@@ -70,4 +71,4 @@ function Header() {
     )
 }
 
-export default Header
+

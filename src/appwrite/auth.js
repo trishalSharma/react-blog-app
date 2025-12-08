@@ -13,6 +13,8 @@ export class AuthService {
         this.account = new Account(this.client);
     }
 
+//todo: email verification, password-reset/forgot password, update user profile, get all session, social login/Oauth
+    
     async createAccount({ email, password, name }) {
         try {
             const userAccount = await this.account.create(

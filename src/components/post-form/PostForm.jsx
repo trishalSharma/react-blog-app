@@ -5,6 +5,9 @@ import appwriteService from "../../appwrite/config";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+/*Todo: image preview, form validation messages, disable submit button during upload,  
+add confirmation before  deleting, max file check, auto-save*/ 
+
 export default function PostForm({ post }) {
     const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
         defaultValues: {
@@ -21,26 +24,27 @@ export default function PostForm({ post }) {
     const submit = async (data) => {
         try {
             if (post) {
-                // UPDATE POST
+                // UPDATING POST
                 const file = data.image[0]
                     ? await appwriteService.uploadFile(data.image[0])
                     : null;
 
                 if (file) {
-                    await appwriteService.deleteFile(post.featuredImage);
+                    await appwriteService.deleteFile(post.featureImage);
                 }
 
                 const dbPost = await appwriteService.updatePost(post.$id, {
                     ...data,
-                    featuredImage: file ? file.$id : post.featuredImage,
+                    featureImage: file ? file.$id : post.featureImage,
                 });
 
                 if (dbPost) navigate(`/post/${dbPost.$id}`);
+
             } else {
-                // CREATE POST
+                // CREATING POST
                 const file = await appwriteService.uploadFile(data.image[0]);
 
-                data.featuredImage = file.$id;
+                data.featureImage = file.$id;
 
                 const dbPost = await appwriteService.createPost({
                     ...data,
@@ -117,7 +121,7 @@ export default function PostForm({ post }) {
 
                 {post && (
                     <img
-                        src={appwriteService.getFilePreview(post.featuredImage)}
+                        src={appwriteService.getFileView(post.featureImage)}
                         alt={post.title}
                         className="rounded-lg mb-4"
                     />

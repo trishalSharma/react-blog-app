@@ -1,6 +1,8 @@
     import conf from '../conf/conf';
     import { Client, ID, Databases, Storage, Query } from "appwrite";
 
+    // Todo: search functionality, profile page, 
+
     export class Service{
         client = new Client();
         databases;
@@ -14,7 +16,7 @@
             this.databases = new Databases(this.client);
         }
 
-        async  createPost({title, slug, content, featuredImage, status, userId}){
+        async  createPost({title, slug, content, featureImage, status, userId}){
             try {
                 return await this.databases.createDocument(
                     conf.appwriteDatabaseId,
@@ -23,7 +25,7 @@
                     {
                         title,
                         content,
-                        featuredImage,
+                        featureImage,
                         status,
                         userId,
 
@@ -34,7 +36,7 @@
             }
         }
 
-        async updatePost(slug,{title, content, featuredImage, status}){
+        async updatePost(slug,{title, content, featureImage, status}){
             try {
                 return await this.databases.updateDocument(
                     conf.appwriteDatabaseId,
@@ -43,7 +45,7 @@
                     {
                         title,
                         content,
-                        featuredImage,
+                     featureImage,
                         status,
                     }
                 )
@@ -79,6 +81,7 @@
                 return false;
             }
         }
+
     async getPosts(queries = [Query.equal("status", "active")]) {
         try {
             const response = await this.databases.listDocuments(
@@ -94,15 +97,15 @@
         }
     }
 
-
-        // services of File upload
+        // services for File CRUD
 
         async uploadFile(file) {
         try {
-            return await this.bucket.uploadFile(
+            return await this.bucket.createFile(
                 conf.appwriteBucketId,
                 ID.unique(),
-                file
+                file,
+                ["read(\"any\")"]   
             );
         } catch (error) {
             console.log("Appwrite service :: uploadFile :: error", error);
@@ -124,15 +127,13 @@
             }
         }
 
-        getFilePreview(fileId){
-            return this.bucket.getFilePreview(
+        getFileView(fileId){
+            return this.bucket.getFileView(
                 conf.appwriteBucketId,
                 fileId
             )
         }
     }
-
-
 
     const service= new Service()
     export default service

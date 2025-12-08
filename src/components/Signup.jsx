@@ -1,19 +1,23 @@
 import React, {useState} from 'react'
 import authService from '../appwrite/auth'
 import {Link, useNavigate} from 'react-router-dom'
-import {login} from '../store/authSlice'
+import {login, setLoading} from '../store/authSlice'
 import {Button, Input, Logo} from  './index'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {useForm} from 'react-hook-form'
+import Loader from './Loader'
 
 function Signup(){
         const navigate = useNavigate()
         const[error, setError] = useState("")
         const dispatch = useDispatch()
         const{register, handleSubmit} = useForm()
+        const loading = useSelector(state => state.auth.loading)
 
         const create = async(data) => {
+            dispatch(setLoading(true));
             setError("")
+
             try {
                 const userData = await authService.createAccount(data)
                 if(userData) {
@@ -23,6 +27,8 @@ function Signup(){
                 }
             } catch (error) {
                 setError(error.message)
+            } finally {
+                dispatch(setLoading(false));
             }
         }
 
@@ -76,10 +82,13 @@ function Signup(){
                                             required: true,
                                         })}
                                         />
-                                        <Button type = "submit"   className="w-full bg-blue-500 text-white py-2 px-4 rounded 
-               transition duration-300 hover:opacity-95 hover:text-gray-100">
-                                            Create Account
-                                        </Button>
+                                        <Button
+                                        type="submit"
+                                    className={`px-4 py-2 rounded bg-blue-600 text-white flex items-center justify-center gap-2 
+                        ${loading ? "opacity-70 cursor-not-allowed" : ""}`} loading = {loading}>
+                                                    {loading? "Signing you in...": "Create Account"}
+                                                       </Button>
+
                     </div>
                 </form>
             </div>
