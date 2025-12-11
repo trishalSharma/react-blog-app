@@ -1,5 +1,5 @@
     import conf from '../conf/conf';
-    import { Client, ID, Databases, Storage, Query } from "appwrite";
+    import { Client, ID, Databases, Storage, Query, Permission, Role} from "appwrite";
 
     // Todo: search functionality, profile page, 
 
@@ -16,7 +16,7 @@
             this.databases = new Databases(this.client);
         }
 
-        async  createPost({title, slug, content, featureImage, status, userId}){
+        async  createPost({title, slug, content, featureImage, status, userId,userName}){
             try {
                 return await this.databases.createDocument(
                     conf.appwriteDatabaseId,
@@ -28,8 +28,10 @@
                         featureImage,
                         status,
                         userId,
+                        userName,
 
-                    }
+                    },
+        
                 )
             } catch (error) {
                 console.log("Appwrite service :: createPost :: error", error);
@@ -90,11 +92,28 @@
                 queries
             );
 
-            return response?.documents  || [];   
+            return response.documents;   
         } catch (error) {
             console.log("Appwrite service :: getPosts :: error", error);
             return [];
         }
+    }
+
+    async getUserPosts(userId){
+        try {
+            const response =  await this.databases.listDocuments(
+    conf.appwriteDatabaseId,
+    conf.appwriteCollectionId,
+    [
+        Query.equal("userId",userId)
+    ]
+);
+return response.documents;
+        } catch{
+            console.log("Appwrite :: getUserPosts :: error", error)
+            return [];
+        }
+
     }
 
         // services for File CRUD
