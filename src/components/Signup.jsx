@@ -1,118 +1,106 @@
 import React, { useState } from "react";
 import authService from "../appwrite/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { login, setLoading } from "../store/authSlice";
+import { login, setLoading } from "../store/authSlice"
 import { Button, Input, Logo } from "./index";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 
-function Signup() {
+export default function Signup() {
   const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const dispatch = useDispatch();
-  const { register, handleSubmit } = useForm();
-  const loading = useSelector((state) => state.auth.loading);
 
-    const create = async (data) => {
-      dispatch(setLoading(true));
-      setError("");
+  function handleChange(e) {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  }
 
-      try {
-        const userData = await authService.createAccount(data);
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
-         if (userData.status === "VERIFICATION_REQUIRED") {
-      navigate("/verify");
-      return;
+    try {
+      await authService.createAccount(formData);
+
+      navigate("/check-email");
+    } catch (err) {
+      setError(err.message || "Signup failed");
+    } finally {
+      setLoading(false);
     }
-
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        dispatch(setLoading(false));
-      }
-    };
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#071a1e] px-4 relative">
+    <div className="min-h-screen flex items-center justify-center bg-[#071a1e] text-white">
+      <div className="w-full max-w-md bg-slate-800 p-8 rounded-2xl shadow-lg">
+        <h1 className="text-2xl font-semibold mb-6 text-center">
+          Create your account
+        </h1>
 
-      {/* Background Glow */}
-      <div className="absolute inset-0 blur-[120px] opacity-40 bg-blue-900/20"></div>
-
-      {/* Signup Card */}
-      <div className="relative w-full max-w-md bg-white/10 backdrop-blur-xl 
-                      border border-white/20 rounded-2xl shadow-2xl p-10">
-
-        {/* Logo */}
-        <div className="flex justify-center mb-6">
-          <Logo width="90px" />
-        </div>
-
-        <h2 className="text-center text-3xl font-bold text-white tracking-tight">
-          Create Your Account
-        </h2>
-
-        <p className="mt-3 text-center text-gray-300">
-          Already have an account?
-          <Link to="/login" className="text-blue-400 hover:underline ml-1">
-            Sign in
-          </Link>
-        </p>
-
-        {/* Error message */}
         {error && (
-          <p className="bg-red-500/20 text-red-300 text-center py-2 px-3 rounded-lg mt-6 text-sm border border-red-500/30">
+          <p className="mb-4 text-sm text-red-400 text-center">
             {error}
           </p>
         )}
 
-        {/* Form */}
-        <form onSubmit={handleSubmit(create)} className="mt-8 space-y-6">
-
-          <Input
-            label="Full Name"
-            placeholder="John Doe"
-            {...register("name", { required: true })}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            required
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full px-4 py-2 rounded-lg bg-slate-700 focus:outline-none"
           />
 
-          <Input
-            label="Email Address"
+          <input
             type="email"
-            placeholder="you@example.com"
-            {...register("email", {
-              required: true,
-              validate: {
-                matchPatern: (value) =>
-                  /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                  "Enter a valid email",
-              },
-            })}
+            name="email"
+            placeholder="Email Address"
+            required
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full px-4 py-2 rounded-lg bg-slate-700 focus:outline-none"
           />
 
-          <Input
-            label="Password"
+          <input
             type="password"
-            placeholder="••••••••"
-            {...register("password", { required: true })}
+            name="password"
+            placeholder="Password"
+            required
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full px-4 py-2 rounded-lg bg-slate-700 focus:outline-none"
           />
 
-          {/* Submit Button */}
-          <Button
+          <button
             type="submit"
-            className={`
-              w-full px-4 py-3 rounded-xl text-white text-lg font-medium
-              bg-blue-600 hover:bg-blue-500 active:scale-95
-              flex justify-center items-center transition-all 
-              ${loading ? "opacity-70 cursor-not-allowed gap-3" : ""}
-            `}
-            loading={loading}
+            disabled={loading}
+            className="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-700 transition disabled:opacity-50"
           >
-            {loading ? "Creating account..." : "Create Account"}
-          </Button>
-
+            {loading ? "Creating account..." : "Sign Up"}
+          </button>
         </form>
+
+        <p className="mt-6 text-sm text-center text-gray-300">
+          Already have an account?{" "}
+          <Link to="/login" className="text-blue-400 hover:underline">
+            Login
+          </Link>
+        </p>
       </div>
     </div>
   );
 }
-
-export default Signup;

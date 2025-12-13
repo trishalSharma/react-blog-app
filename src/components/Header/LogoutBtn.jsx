@@ -1,22 +1,28 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import authService from '../../appwrite/auth';
-import { logout } from '../../store/authSlice';
+import React from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import authService from "../../appwrite/auth";
+import { logout} from "../../store/authSlice"
 
+export default function LogoutBtn() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-export default function LogoutBtn(){
+  async function handleLogout() {
+    try {
+      await authService.logout();
+    } finally {
+      dispatch(logout());
+      navigate("/login");
+    }
+  }
 
-      const dispatch = useDispatch()
-        const logoutHandler = () => {
-            authService.logout().then(() => {
-                dispatch(logout())
-            })
-        }
-    return(
-      <button className='inline-block px-6 py-2 duration-200 active:opacity-50 hover:bg-slate-200  hover:text-black rounded-full cursor-pointer' 
-      onClick={logoutHandler}>
-        Logout</button>
-
-    )
+  return (
+    <button
+      onClick={handleLogout}
+      className="px-4 py-2 rounded-full bg-red-600 hover:bg-red-700 transition"
+    >
+      Logout
+    </button>
+  );
 }
-

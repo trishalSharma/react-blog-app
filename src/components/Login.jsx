@@ -1,111 +1,95 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { login as authLogin, setLoading } from "../store/authSlice";
-import { Button, Input, Logo } from "./index";
-import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
 import authService from "../appwrite/auth";
-import { useForm } from "react-hook-form";
 
-function Login() {
+export default function Login() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { register, handleSubmit } = useForm();
-  const [error, setError] = useState("");
-  const loading = useSelector((state) => state.auth.loading);
 
-  const login = async (data) => {
-    dispatch(setLoading(true));
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  function handleChange(e) {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
-      const session = await authService.login(data);
+      await authService.login(formData);
 
-      if (session) {
-        const userData = await authService.getCurrentUser();
-        if (userData) dispatch(authLogin(userData));
-        navigate("/");
+      navigate("/");
+    } catch (err) {
+      if (err.message === "EMAIL_NOT_VERIFIED") {
+        navigate("/check-email");
+      } else {
+        setError("Invalid email or password");
       }
-    } catch (error) {
-      setError(error.message);
     } finally {
-      dispatch(setLoading(false));
+      setLoading(false);
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#071a1e] px-4 relative">
+    <div className="min-h-screen flex items-center justify-center bg-[#071a1e] text-white">
+      <div className="w-full max-w-md bg-slate-800 p-8 rounded-2xl shadow-lg">
+        <h1 className="text-2xl font-semibold mb-6 text-center">
+          Login
+        </h1>
 
-      {/* Background Glow */}
-      <div className="absolute inset-0 blur-[120px] opacity-40 bg-blue-900/20"></div>
-
-      {/* Login Card */}
-      <div className="relative w-full max-w-md bg-white/10 backdrop-blur-xl 
-                      border border-white/20 rounded-2xl shadow-2xl p-10">
-
-        {/* Logo */}
-        <div className="flex justify-center mb-6">
-          <Logo width="90px" />
-        </div>
-
-        <h2 className="text-center text-3xl font-bold text-white tracking-tight">
-          Welcome Back
-        </h2>
-
-        <p className="mt-3 text-center text-gray-300">
-          Don't have an account?
-          <Link to="/signup" className="text-blue-400 hover:underline ml-1">
-            Sign up
-          </Link>
-        </p>
-
-        {/* Error message */}
         {error && (
-          <p className="bg-red-500/20 text-red-300 text-center py-2 px-3 rounded-lg mt-6 text-sm border border-red-500/30">
+          <p className="mb-4 text-sm text-red-400 text-center">
             {error}
           </p>
         )}
 
-        {/* Form */}
-        <form onSubmit={handleSubmit(login)} className="mt-8 space-y-6">
-
-          <Input
-            label="Email Address"
-            placeholder="you@example.com"
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
             type="email"
-            {...register("email", {
-              required: true,
-              validate: {
-                matchPatern: (value) =>
-                  /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                  "Enter a valid email",
-              },
-            })}
+            name="email"
+            placeholder="Email Address"
+            required
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full px-4 py-2 rounded-lg bg-slate-700 focus:outline-none"
           />
 
-          <Input
-            label="Password"
+          <input
             type="password"
-            placeholder="••••••••"
-            {...register("password", { required: true })}
+            name="password"
+            placeholder="Password"
+            required
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full px-4 py-2 rounded-lg bg-slate-700 focus:outline-none"
           />
 
-          {/* Submit Button */}
-          <Button
+          <button
             type="submit"
-            className={`
-              w-full px-4 py-3 rounded-xl text-white text-lg font-medium
-              bg-blue-600 hover:bg-blue-500 active:scale-95
-              flex justify-center items-center transition-all 
-              ${loading ? "opacity-70 cursor-not-allowed gap-3" : ""}
-            `}
-            loading={loading}  
+            disabled={loading}
+            className="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-700 transition disabled:opacity-50"
           >
-            {loading ? "Logging you in..." : "Log in"}
-          </Button>
+            {loading ? "Logging in..." : "Login"}
+          </button>
         </form>
+
+        <p className="mt-6 text-sm text-center text-gray-300">
+          Don’t have an account?{" "}
+          <Link to="/signup" className="text-blue-400 hover:underline">
+            Sign up
+          </Link>
+        </p>
       </div>
     </div>
   );
 }
-
-export default Login;
