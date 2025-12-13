@@ -12,6 +12,8 @@ import Signup from './pages/Signup'
 import EditPost from "./pages/EditPost";
 import Post from "./pages/Post";
 import AllPosts from "./pages/AllPosts";
+import Verify from './pages/Verify.jsx';
+import MagicLogin from './pages/MagicLogin.jsx'
 
 const router = createBrowserRouter([
   {
@@ -35,6 +37,15 @@ const router = createBrowserRouter([
           </AuthLayout>
         ),
       },
+          {
+  path: "/verify",
+  element: <Verify />,
+},
+{
+  path: "/magic-login",
+  element: <MagicLogin />
+},
+
       {
         path: "/all-posts",
         element: (
@@ -51,6 +62,7 @@ const router = createBrowserRouter([
           </AuthLayout>
         ),
       },
+  
       {
         path: "/edit-post/:slug",
         element: (

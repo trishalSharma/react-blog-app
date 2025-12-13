@@ -13,24 +13,24 @@ function Signup() {
   const { register, handleSubmit } = useForm();
   const loading = useSelector((state) => state.auth.loading);
 
-  const create = async (data) => {
-    dispatch(setLoading(true));
-    setError("");
+    const create = async (data) => {
+      dispatch(setLoading(true));
+      setError("");
 
-    try {
-      const userData = await authService.createAccount(data);
+      try {
+        const userData = await authService.createAccount(data);
 
-      if (userData) {
-        const currentUser = await authService.getCurrentUser();
-        if (currentUser) dispatch(login(userData));
-        navigate("/");
-      }
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      dispatch(setLoading(false));
+         if (userData.status === "VERIFICATION_REQUIRED") {
+      navigate("/verify");
+      return;
     }
-  };
+
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        dispatch(setLoading(false));
+      }
+    };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#071a1e] px-4 relative">
