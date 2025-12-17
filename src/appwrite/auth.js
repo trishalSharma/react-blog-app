@@ -12,8 +12,7 @@ export class AuthService {
 
         this.account = new Account(this.client);
     }
-
-//todo: email verification, password-reset/forgot password, update user profile, get all session, social login/Oauth
+    
     
     async createAccount({ email, password, name }) {
         try {
@@ -34,6 +33,8 @@ export class AuthService {
         }
     }
 
+    
+
     async login({ email, password }) {
         try {
             return await this.account.createEmailPasswordSession(email, password);
@@ -41,6 +42,18 @@ export class AuthService {
             throw error;
         }
     }
+    async loginWithGoogle() {
+    try {
+        return await this.account.createOAuth2Session(
+            "google",
+            "http://localhost:5173/",        
+            "http://localhost:5173/login"    
+        );
+    } catch (error) {
+        throw error;
+    }
+}
+
 
     async getCurrentUser() {
     try {

@@ -4,6 +4,8 @@ import { login as authLogin, setLoading } from "../store/authSlice";
 import { Button, Input, Logo } from "./index";
 import { useDispatch, useSelector } from "react-redux";
 import authService from "../appwrite/auth";
+import googleIcon from "../assets/socials/google.svg";
+
 import { useForm } from "react-hook-form";
 
 function Login() {
@@ -102,6 +104,12 @@ function Login() {
           >
             {loading ? "Logging you in..." : "Log in"}
           </Button>
+<p>---------- OR ----------</p>
+            <button className="w-full flex justify-center items-center gap-2 px-4 py-2 cursor-pointer hover:underline">
+  <span>Log in with Google</span>
+  <img src={googleIcon} className="w-6 h-6" />
+</button>
+
         </form>
       </div>
     </div>

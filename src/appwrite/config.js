@@ -1,8 +1,6 @@
     import conf from '../conf/conf';
     import { Client, ID, Databases, Storage, Query, Permission, Role} from "appwrite";
 
-    // Todo: search functionality, profile page, 
-
     export class Service{
         client = new Client();
         databases;
