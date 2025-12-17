@@ -5,7 +5,7 @@ import { login, setLoading } from "../store/authSlice";
 import { Button, Input, Logo } from "./index";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-
+import googleIcon from "../assets/socials/google.svg"
 function Signup() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
@@ -108,6 +108,12 @@ function Signup() {
           >
             {loading ? "Creating account..." : "Create Account"}
           </Button>
+                
+          <p>---------- OR ----------</p>
+                      <button className="w-full flex justify-center items-center gap-2 px-4 py-2 cursor-pointer hover:underline">
+            <span>Sign up in with Google</span>
+            <img src={googleIcon} className="w-6 h-6" />
+          </button>
 
         </form>
       </div>
