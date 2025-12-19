@@ -1,4 +1,3 @@
-import React from 'react';
 import { useDispatch } from 'react-redux';
 import authService from '../../appwrite/auth';
 import { logout } from '../../store/authSlice';
@@ -10,6 +9,7 @@ export default function LogoutBtn(){
         const logoutHandler = () => {
             authService.logout().then(() => {
                 dispatch(logout())
+                  sessionStorage.setItem("loginToastShown", "true");
             })
         }
     return(

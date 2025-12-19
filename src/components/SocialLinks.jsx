@@ -1,34 +1,37 @@
 import React from 'react';
+import xIcon from "../assets/socials/x.jpeg"
+import instagramIcon from "../assets/socials/instagram.svg"
+import linkedinIcon from "../assets/socials/linkedin.svg"
 
 export default function SocialLinks(){
 
     const socialRedirecting = [
          {
       socialName: "X",
-      socialIcon: "/images/socials/x.svg",
+      socialIcon: xIcon,
       socialLink: "https://x.com/"
     },
     {
       socialName: "LinkedIn",
-      socialIcon: "/images/socials/linkedin.svg",
-      socialLink: "https://linkedin.com/in/"
+      socialIcon: linkedinIcon,
+      socialLink: "https://linkedin.com/"
     },
     {
       socialName: "Instagram",
-      socialIcon: "/images/socials/instagram.svg",
+      socialIcon: instagramIcon,
       socialLink: "https://instagram.com/"
     }
   ];
     
     
 return(
-<div className='flex items-center justify-center gap-4 bg-[#1e293b] rounded-full py-2 border-blue-400'>
+<div className='flex items-center justify-center gap-2 rounded-full py-2 border-blue-400'>
 {socialRedirecting.map((e) => (
     <img 
     key = {e.socialName}
     src ={e.socialIcon}
     alt = {e.socialName}
-    className='h-6 p-0.5 w-10 object-contain block cursor-pointer hover:opacity-75 transition'
+    className='h-7 p-0.5 w-10 object-contain block cursor-pointer hover:opacity-75 transition'
     onClick = {() => window.open(e.socialLink, "_blank") }
     
 />

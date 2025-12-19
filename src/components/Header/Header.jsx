@@ -1,4 +1,3 @@
-import React from 'react';
 import { Container, Logo, LogoutBtn } from '../index';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -43,7 +42,7 @@ export default function Header() {
                                     <button
                                         onClick={() => navigate(item.slug)}
                                         className="
-                                        px-4 py-2 rounded-full text-sm font-medium 
+                                        px-4 py-2 rounded-full text-lg font-medium 
                                         text-gray-200
                                         hover:bg-white/20 hover:text-white
                                         active:scale-95 
@@ -56,7 +55,7 @@ export default function Header() {
                             ) : null
                         )}
 
-                        {/* LOGOUT BUTTON */}
+                       
                         {authStatus && (
                             <li>
                                 <LogoutBtn />

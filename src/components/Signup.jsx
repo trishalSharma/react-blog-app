@@ -13,6 +13,10 @@ function Signup() {
   const { register, handleSubmit } = useForm();
   const loading = useSelector((state) => state.auth.loading);
 
+  const handleGoogleLogin = () => {
+    authService.loginWithGoogle();
+};
+
   const create = async (data) => {
     dispatch(setLoading(true));
     setError("");
@@ -109,9 +113,15 @@ function Signup() {
             {loading ? "Creating account..." : "Create Account"}
           </Button>
                 
-          <p>---------- OR ----------</p>
-                      <button className="w-full flex justify-center items-center gap-2 px-4 py-2 cursor-pointer hover:underline">
-            <span>Sign up in with Google</span>
+          <p>——— OR ———</p>
+                      <button 
+                      className="w-full flex justify-center items-center hover:bg-white hover:text-black
+         active:scale-95 active:bg-white
+         transition-all duration-150 border border-white/50  gap-2 px-4 py-2 cursor-pointer"
+                      type = "submit"
+                      onClick={handleGoogleLogin}
+                      >
+            <span>Continue with Google</span>
             <img src={googleIcon} className="w-6 h-6" />
           </button>
 
