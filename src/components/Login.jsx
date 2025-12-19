@@ -1,21 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login as authLogin, setLoading } from "../store/authSlice";
-import { Button, Input, Logo } from "./index";
 import { useDispatch, useSelector } from "react-redux";
-import authService from "../appwrite/auth";
-import googleIcon from "../assets/socials/google.svg";
-import AuthToast from "../components/AuthToast";
 import { useForm } from "react-hook-form";
+
+import { login as authLogin, setLoading } from "../store/authSlice";
+import authService from "../appwrite/auth";
+
+import { Button, Input, Logo } from "./index";
+import AuthToast from "./AuthToast";
+
+import googleIcon from "../assets/socials/google.svg";
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const { register, handleSubmit } = useForm();
   const loading = useSelector((state) => state.auth.loading);
+
   const [error, setError] = useState("");
+  const [toastMessage, setToastMessage] = useState("");
 
  
+  useEffect(() => {
+    const resetToast = sessionStorage.getItem("Password_Reset_Success");
+
+    if (resetToast) {
+      setToastMessage("Your password has been updated successfully.");
+      sessionStorage.removeItem("Password_Reset_Success");
+    }
+  }, []);
 
   const login = async (data) => {
     dispatch(setLoading(true));
@@ -26,7 +40,10 @@ function Login() {
 
       if (session) {
         const userData = await authService.getCurrentUser();
-        if (userData) dispatch(authLogin(userData));
+        if (userData) {
+          dispatch(authLogin(userData));
+        }
+
         sessionStorage.setItem("loginToastShown", "true");
       }
     } catch (error) {
@@ -37,21 +54,33 @@ function Login() {
   };
 
   const handleGoogleLogin = () => {
-  authService.loginWithGoogle();
-};
+    authService.loginWithGoogle();
+  };
 
- 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-[#071a1e] px-4 relative">
+      {toastMessage && (
+        <AuthToast
+          message={toastMessage}
+          onClose={() => setToastMessage("")}
+        />
+      )}
+
+      <div className="relative min-h-screen flex items-center justify-center bg-[#071a1e] px-4">
         {/* Background Glow */}
-        <div className="absolute inset-0 blur-[120px] opacity-40 bg-blue-900/20"></div>
+        <div className="absolute inset-0 blur-[120px] opacity-40 bg-blue-900/20" />
 
-        {/* Login Card */}
-        <div className="relative w-full max-w-md bg-white/10 backdrop-blur-xl
-                        border border-white/20 rounded-2xl shadow-2xl p-10">
-
-          {/* Logo */}
+        
+        <div
+          className="
+            relative w-full max-w-md
+            bg-white/10 backdrop-blur-xl
+            border border-white/20
+            rounded-2xl shadow-2xl
+            p-10
+          "
+        >
+          
           <div className="flex justify-center mb-6">
             <Logo width="90px" />
           </div>
@@ -61,23 +90,35 @@ function Login() {
           </h2>
 
           <p className="mt-3 text-center text-gray-300">
-            Don't have an account?
-            <Link to="/signup" className="text-blue-400 hover:underline ml-1">
+            Don&apos;t have an account?
+            <Link
+              to="/signup"
+              className="ml-1 text-blue-400 hover:underline"
+            >
               Sign up
             </Link>
           </p>
 
-          {/* Error message */}
+          
           {error && (
-            <p className="bg-red-500/20 text-red-300 text-center py-2 px-3
-                          rounded-lg mt-6 text-sm border border-red-500/30">
+            <p
+              className="
+                mt-6 rounded-lg
+                bg-red-500/20
+                border border-red-500/30
+                py-2 px-3
+                text-center text-sm text-red-300
+              "
+            >
               {error}
             </p>
           )}
 
-          {/* Form */}
-          <form onSubmit={handleSubmit(login)} className="mt-8 space-y-6">
-
+    
+          <form
+            onSubmit={handleSubmit(login)}
+            className="mt-8 space-y-6"
+          >
             <Input
               label="Email Address"
               placeholder="you@example.com"
@@ -101,39 +142,54 @@ function Login() {
               })}
             />
 
-            {/* Submit Button */}
+           
             <Button
               type="submit"
+              loading={loading}
               className={`
-                w-full px-4 py-3 rounded-xl text-white text-lg font-medium
-                bg-blue-600 hover:bg-blue-500 active:scale-95
-                flex justify-center items-center transition-all
+                w-full px-4 py-3
+                rounded-xl text-lg font-medium text-white
+                bg-blue-600 hover:bg-blue-500
+                active:scale-95 transition-all
                 ${loading ? "opacity-70 cursor-not-allowed gap-3" : ""}
               `}
-              loading={loading}
             >
               {loading ? "Logging you in..." : "Log in"}
             </Button>
 
+            
+            <Link
+              to="/forgot-password"
+              className="block text-center text-blue-500 hover:underline active:opacity-70"
+            >
+              Forgot password?
+            </Link>
+
             <p className="text-center text-gray-400">——— OR ———</p>
 
+           
             <button
               type="button"
               onClick={handleGoogleLogin}
-              className="w-full flex justify-center items-center gap-2 px-4 py-2
-                         border border-white/50 rounded-xl text-white
-                         hover:bg-white hover:text-black
-                         active:scale-95 transition-all duration-150"
+              className="
+                w-full flex items-center justify-center gap-2
+                px-4 py-2
+                border border-white/50
+                rounded-xl text-white
+                hover:bg-white hover:text-black
+                active:scale-95 transition-all duration-150
+              "
             >
-              <img src={googleIcon} className="w-6 h-6" alt="Google" />
+              <img
+                src={googleIcon}
+                alt="Google"
+                className="w-6 h-6"
+              />
               <span>Continue with Google</span>
             </button>
-
           </form>
         </div>
       </div>
-
-  
     </>
   );
 }
