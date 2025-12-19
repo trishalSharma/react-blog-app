@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login as authLogin, setLoading } from "../store/authSlice";
 import { Button, Input, Logo } from "./index";
 import { useDispatch, useSelector } from "react-redux";
 import authService from "../appwrite/auth";
 import googleIcon from "../assets/socials/google.svg";
-
+import AuthToast from "../components/AuthToast";
 import { useForm } from "react-hook-form";
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
-  const [error, setError] = useState("");
   const loading = useSelector((state) => state.auth.loading);
+  const [error, setError] = useState("");
+
+ 
 
   const login = async (data) => {
     dispatch(setLoading(true));
@@ -25,7 +27,7 @@ function Login() {
       if (session) {
         const userData = await authService.getCurrentUser();
         if (userData) dispatch(authLogin(userData));
-        navigate("/");
+        sessionStorage.setItem("loginToastShown", "true");
       }
     } catch (error) {
       setError(error.message);
@@ -34,85 +36,105 @@ function Login() {
     }
   };
 
+  const handleGoogleLogin = () => {
+  authService.loginWithGoogle();
+};
+
+ 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#071a1e] px-4 relative">
+    <>
+      <div className="min-h-screen flex items-center justify-center bg-[#071a1e] px-4 relative">
+        {/* Background Glow */}
+        <div className="absolute inset-0 blur-[120px] opacity-40 bg-blue-900/20"></div>
 
-      {/* Background Glow */}
-      <div className="absolute inset-0 blur-[120px] opacity-40 bg-blue-900/20"></div>
+        {/* Login Card */}
+        <div className="relative w-full max-w-md bg-white/10 backdrop-blur-xl
+                        border border-white/20 rounded-2xl shadow-2xl p-10">
 
-      {/* Login Card */}
-      <div className="relative w-full max-w-md bg-white/10 backdrop-blur-xl 
-                      border border-white/20 rounded-2xl shadow-2xl p-10">
+          {/* Logo */}
+          <div className="flex justify-center mb-6">
+            <Logo width="90px" />
+          </div>
 
-        {/* Logo */}
-        <div className="flex justify-center mb-6">
-          <Logo width="90px" />
-        </div>
+          <h2 className="text-center text-3xl font-bold text-white tracking-tight">
+            Welcome Back
+          </h2>
 
-        <h2 className="text-center text-3xl font-bold text-white tracking-tight">
-          Welcome Back
-        </h2>
-
-        <p className="mt-3 text-center text-gray-300">
-          Don't have an account?
-          <Link to="/signup" className="text-blue-400 hover:underline ml-1">
-            Sign up
-          </Link>
-        </p>
-
-        {/* Error message */}
-        {error && (
-          <p className="bg-red-500/20 text-red-300 text-center py-2 px-3 rounded-lg mt-6 text-sm border border-red-500/30">
-            {error}
+          <p className="mt-3 text-center text-gray-300">
+            Don't have an account?
+            <Link to="/signup" className="text-blue-400 hover:underline ml-1">
+              Sign up
+            </Link>
           </p>
-        )}
 
-        {/* Form */}
-        <form onSubmit={handleSubmit(login)} className="mt-8 space-y-6">
+          {/* Error message */}
+          {error && (
+            <p className="bg-red-500/20 text-red-300 text-center py-2 px-3
+                          rounded-lg mt-6 text-sm border border-red-500/30">
+              {error}
+            </p>
+          )}
 
-          <Input
-            label="Email Address"
-            placeholder="you@example.com"
-            type="email"
-            {...register("email", {
-              required: true,
-              validate: {
-                matchPatern: (value) =>
-                  /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                  "Enter a valid email",
-              },
-            })}
-          />
+          {/* Form */}
+          <form onSubmit={handleSubmit(login)} className="mt-8 space-y-6">
 
-          <Input
-            label="Password"
-            type="password"
-            placeholder="••••••••"
-            {...register("password", { required: true })}
-          />
+            <Input
+              label="Email Address"
+              placeholder="you@example.com"
+              type="email"
+              {...register("email", {
+                required: "Email is required",
+                validate: {
+                  matchPattern: (value) =>
+                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+                    "Enter a valid email",
+                },
+              })}
+            />
 
-          {/* Submit Button */}
-          <Button
-            type="submit"
-            className={`
-              w-full px-4 py-3 rounded-xl text-white text-lg font-medium
-              bg-blue-600 hover:bg-blue-500 active:scale-95
-              flex justify-center items-center transition-all 
-              ${loading ? "opacity-70 cursor-not-allowed gap-3" : ""}
-            `}
-            loading={loading}  
-          >
-            {loading ? "Logging you in..." : "Log in"}
-          </Button>
-<p>---------- OR ----------</p>
-            <button className="w-full flex justify-center items-center gap-2 px-4 py-2 cursor-pointer hover:underline">
-  <span>Log in with Google</span>
-  <img src={googleIcon} className="w-6 h-6" />
-</button>
+            <Input
+              label="Password"
+              type="password"
+              placeholder="••••••••"
+              {...register("password", {
+                required: "Password is required",
+              })}
+            />
 
-        </form>
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              className={`
+                w-full px-4 py-3 rounded-xl text-white text-lg font-medium
+                bg-blue-600 hover:bg-blue-500 active:scale-95
+                flex justify-center items-center transition-all
+                ${loading ? "opacity-70 cursor-not-allowed gap-3" : ""}
+              `}
+              loading={loading}
+            >
+              {loading ? "Logging you in..." : "Log in"}
+            </Button>
+
+            <p className="text-center text-gray-400">——— OR ———</p>
+
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              className="w-full flex justify-center items-center gap-2 px-4 py-2
+                         border border-white/50 rounded-xl text-white
+                         hover:bg-white hover:text-black
+                         active:scale-95 transition-all duration-150"
+            >
+              <img src={googleIcon} className="w-6 h-6" alt="Google" />
+              <span>Continue with Google</span>
+            </button>
+
+          </form>
+        </div>
       </div>
-    </div>
+
+  
+    </>
   );
 }
 

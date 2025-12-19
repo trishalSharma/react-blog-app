@@ -16,12 +16,15 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
 
         <div className="flex flex-col justify-between">
-          <div className="mb-4">
+          <div className="mb-4 flex justify-center items-center">
             <Logo width="100px" />
+            <p>Write[ Square ]</p>
           </div>
-          <p className="text-sm text-gray-400 leading-relaxed max-w-xs">
-            Write, express, and share your ideas with WriteSquare — the clean and modern blogging platform for creators.
-          </p>
+          <p className="text-sm text-gray-400 leading-relaxed max-w-md text-center">
+
+  Write, express, and share your ideas with WriteSquare — the clean and modern blogging platform for creators.
+</p>
+
           <p className="mt-6 text-sm text-gray-500">
             © {new Date().getFullYear()} WriteSquare. All rights reserved.
           </p>
