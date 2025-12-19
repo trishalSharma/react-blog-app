@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import appwriteService from "../appwrite/config";
-import { Container, PostCard } from "../components";
+import { PostCard } from "../components";
 import AuthToast from "../components/AuthToast";
 
 export default function LoggedInView() {
   const [posts, setPosts] = useState([]);
   const [toastMessage, setToastMessage] = useState("");
-
-
 
   useEffect(() => {
     appwriteService.getPosts().then((documents) => {
@@ -17,13 +14,14 @@ export default function LoggedInView() {
   }, []);
 
   useEffect(() => {
-    const toastFlag = sessionStorage.getItem("loginToastShown");
-    if(toastFlag){
-       setToastMessage("Login successful, Welcome back! 👋");
-       sessionStorage.removeItem("loginToastShown");
+    const loginToast = sessionStorage.getItem("loginToastShown");
+    if(loginToast){
+      setToastMessage("Login successful, Welcome back! 👋");
+      sessionStorage.removeItem("loginToastShown");
     }
-   
+  
   }, []);
+  
   return (
     <>
       {toastMessage && (
