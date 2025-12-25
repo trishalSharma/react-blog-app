@@ -106,7 +106,7 @@
         Query.equal("userId",userId)
     ]
 );
-return response.documents;
+        return response.documents;
         } catch{
             console.log("Appwrite :: getUserPosts :: error", error)
             return [];

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
-export default function AuthToast({ message, onClose, duration = 4000 }) {
+export default function AuthToast({ message, onClose, duration = 3000 }) {
+  
   useEffect(() => {
     const timer = setTimeout(onClose, duration);
     return () => clearTimeout(timer);
@@ -9,8 +10,6 @@ export default function AuthToast({ message, onClose, duration = 4000 }) {
   return (
     <div className="fixed top-6 right-6 z-50 pointer-events-none">
       <div
-        role="status"
-        aria-live="polite"
         className="
           pointer-events-auto
           relative flex items-start gap-4
@@ -38,7 +37,6 @@ export default function AuthToast({ message, onClose, duration = 4000 }) {
 
         <button
           onClick={onClose}
-          aria-label="Close notification"
           className="
             absolute top-2 right-2
             text-green-300/70

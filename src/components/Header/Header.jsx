@@ -12,6 +12,7 @@ export default function Header() {
         { name: "Add Post", slug: "/add-post", active: authStatus },
         { name: "Login", slug: "/login", active: !authStatus },
         { name: "Signup", slug: "/signup", active: !authStatus },
+        {name:"Profile", slug: "/profile", active: authStatus}
     ];
 
     return (
@@ -31,7 +32,7 @@ export default function Header() {
                     {/* LOGO */}
                     <Link to="/" className="flex items-center gap-2 cursor-pointer">
                         <Logo />
-                        <span className="text-lg font-semibold tracking-wide">Write[ Square ]</span>
+                        <span className="text-lg font-semibold tracking-wide">write[ Square ]</span>
                     </Link>
 
                     {/* NAV ITEMS */}

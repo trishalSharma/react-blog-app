@@ -28,7 +28,9 @@ export default function ResetPassword() {
     try {
       await authService.resetPassword(userId, secret, password);
       sessionStorage.setItem("Password_Reset_Success","true")
+     
       navigate("/login");
+
     } catch (err) {
       setError(err.message);
     }
@@ -48,7 +50,6 @@ export default function ResetPassword() {
       space-y-6
     "
   >
-    {/* Title */}
     <h2 className="text-2xl font-semibold text-white text-center">
       Reset your password
     </h2>
@@ -57,7 +58,6 @@ export default function ResetPassword() {
       Enter a new password for your account
     </p>
 
-    {/* New Password */}
     <div className="flex flex-col gap-2">
       <label className="text-sm text-gray-300">
         New Password
@@ -79,7 +79,6 @@ export default function ResetPassword() {
       />
     </div>
 
-    {/* Confirm Password */}
     <div className="flex flex-col gap-2">
       <label className="text-sm text-gray-300">
         Confirm Password
@@ -101,14 +100,12 @@ export default function ResetPassword() {
       />
     </div>
 
-    {/* Error */}
     {error && (
       <p className="text-sm text-red-400 text-center">
         {error}
       </p>
     )}
 
-    {/* Submit */}
     <button
       type="submit"
       className="

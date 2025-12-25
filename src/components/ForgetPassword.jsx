@@ -37,7 +37,6 @@ export default function ForgotPassword() {
       space-y-6
     "
   >
-    {/* Title */}
     <h2 className="text-2xl font-semibold text-white text-center">
       Forgot your password?
     </h2>
@@ -46,7 +45,6 @@ export default function ForgotPassword() {
       Enter your email and we’ll send you a reset link
     </p>
 
-    {/* Email Input */}
     <div className="flex flex-col gap-2">
       <label className="text-sm text-gray-300">
         Email Address
@@ -68,21 +66,18 @@ export default function ForgotPassword() {
       />
     </div>
 
-    {/* Success message */}
     {message && (
       <p className="text-sm text-green-400 text-center">
         {message}
       </p>
     )}
 
-    {/* Error message */}
     {error && (
       <p className="text-sm text-red-400 text-center">
         {error}
       </p>
     )}
 
-    {/* Submit Button */}
     <button
       type="submit"
       className="

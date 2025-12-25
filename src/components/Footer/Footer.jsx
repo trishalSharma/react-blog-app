@@ -18,15 +18,15 @@ export default function Footer() {
         <div className="flex flex-col justify-between">
           <div className="mb-4 flex justify-center items-center">
             <Logo width="100px" />
-            <p>Write[ Square ]</p>
+            <p>write[ Square ]</p>
           </div>
           <p className="text-sm text-gray-400 leading-relaxed max-w-md text-center">
 
-  Write, express, and share your ideas with WriteSquare — the clean and modern blogging platform for creators.
+  Write, express, and share your ideas with writeSquare — the clean and modern blogging platform for creators.
 </p>
 
           <p className="mt-6 text-sm text-gray-500">
-            © {new Date().getFullYear()} WriteSquare. All rights reserved.
+            © {new Date().getFullYear()} writeSquare. All rights reserved.
           </p>
         </div>
 
