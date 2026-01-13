@@ -25,8 +25,6 @@ const authSlice = createSlice({
             state.loading = action.payload;
         }
 
-   
-
     }
 })
 

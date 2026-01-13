@@ -6,6 +6,7 @@ import { Button, Input, Logo } from "./index";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import googleIcon from "../assets/socials/google.svg"
+
 function Signup() {
   const navigate = useNavigate();
   const [error, setError] = useState("");

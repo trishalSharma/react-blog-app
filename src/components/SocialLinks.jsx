@@ -1,4 +1,3 @@
-import React from 'react';
 import xIcon from "../assets/socials/x.jpeg"
 import instagramIcon from "../assets/socials/instagram.svg"
 import linkedinIcon from "../assets/socials/linkedin.svg"

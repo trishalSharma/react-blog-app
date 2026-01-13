@@ -59,8 +59,8 @@ export default function AllPosts() {
                           {!loading && posts.length === 0 && (
                             <div className="flex justify-center">
                                  <p className=" w-full text-center text-gray-400 mt-10">
-    You haven’t created any posts yet.
-  </p>
+                                     You haven’t created any posts yet.
+                                 </p>
                             </div>
  
 )}
