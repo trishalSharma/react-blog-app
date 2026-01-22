@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { LogoutBtn } from "../components";
 import AuthToast from "../components/AuthToast";
 
 export default function LoggedOutView() {

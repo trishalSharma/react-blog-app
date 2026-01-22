@@ -1,4 +1,4 @@
-function Loader({ children, loading, ...props }) {
+export default function Loader({ children, loading, ...props }) {
     return (
         <button
             {...props}
@@ -15,4 +15,4 @@ function Loader({ children, loading, ...props }) {
     );
 }
 
-export default Loader;
+

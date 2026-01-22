@@ -1,6 +1,4 @@
-import react from 'react'
-
-function Button({
+export default function Button({
     children,
     type = 'button',
     bgColor = 'bg-blue-700',
@@ -21,4 +19,3 @@ function Button({
         </button>
     )
 }
-export default Button
