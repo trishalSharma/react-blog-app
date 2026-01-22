@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authSlice from './authSlice'
+import authSlice from './authslice'
 
 // todo: adding listeners - saving theme, saving login session, saving user's preference.
 
