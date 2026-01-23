@@ -1,5 +1,3 @@
-import react from 'react'
-
 function Logo() {
   return (
    <div className="flex items-center p-1 rounded-md 
