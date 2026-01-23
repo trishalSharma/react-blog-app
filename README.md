@@ -1,4 +1,6 @@
-# React Blog Project
+# React Blog Project (writeSquare)
+
+🚀 **Live Demo:** https://react-blog-app-ashy.vercel.app/
 
 A modern, responsive blog application built with **React** using Vite, focused on clean UI, smooth user experience, and scalable architecture. This project has been developed step‑by‑step with continuous improvements over the past few months, covering frontend design, state management, API integration, authentication, deployment, and performance optimization.
 
